@@ -124,7 +124,10 @@ int main(int argc, char **argv) {
 
     string filename = argv[1];
 
-    SDL_Window *window = init::init(400, 400);
+    int width = 400;
+    int height = 400;
+
+    SDL_Window *window = init::init(width, height);
 
     start_watcher_thread(filename);
 
@@ -134,9 +137,22 @@ int main(int argc, char **argv) {
 
     shaders::Program p(filename);
 
-    render::Quad quad(&p);
+    render::Quad quad(&p, width, height);
+
+    SDL_Event e;
 
     while (quit == 0) {
+        while(SDL_PollEvent(&e) != 0) {
+            if(e.type == SDL_QUIT) {
+                quit = 1;
+            }
+
+            if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED) {
+                glViewport(0, 0, e.window.data1, e.window.data2);
+                quad.resize(e.window.data1, e.window.data2);
+            }
+        }
+
         glClear(GL_COLOR_BUFFER_BIT);
         
         quad.render();

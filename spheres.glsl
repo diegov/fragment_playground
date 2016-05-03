@@ -1,9 +1,10 @@
 #version 330 core
 
-#define MAX_ITERS 80
+uniform vec2 resolution;
 
 out vec3 color;
-in vec3 pos;
+
+#define MAX_ITERS 50
 
 float epsilon = 0.001;
 
@@ -68,11 +69,8 @@ float lightContribution(vec3 point, vec3 normal, vec3 light) {
 }
 
 void main() {
-    int resX = 400;
-    int resY = 400;
-
-    float height = float(resY);
-    float width = float(resX);
+    float width = resolution.x;
+    float height = resolution.y;
 
     vec2 centerOffset;
     float divisor;

@@ -16,14 +16,16 @@ namespace shaders {
         ~Program();
         void reload();
 
-        void use();
+        void use(unsigned int screen_width, unsigned int screen_height);
         void release();
-    protected:
+    private:
         GLuint program_handle;
         GLuint vertex_handle;
         GLuint fragment_handle;
         string filename;
-    private:
+
+        GLuint res_handle;
+
         void deleteExistingPrograms();
         void compile(GLuint handle, string &shader_code);
     };

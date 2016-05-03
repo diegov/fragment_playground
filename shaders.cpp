@@ -106,14 +106,23 @@ void main() { \n \
             //throw std::runtime_error(&program_error[0]);
             this->deleteExistingPrograms();
         }
+
+        if (this->program_handle) {
+            glUseProgram(this->program_handle);
+            this->res_handle = glGetUniformLocation(this->program_handle, "resolution");
+            glUseProgram(0);
+        }
     }
 
     Program::~Program() {
         this->deleteExistingPrograms();
     }
 
-    void Program::use() {
+    void Program::use(unsigned int screen_width, unsigned int  screen_height) {
         glUseProgram(this->program_handle);
+        if (this->res_handle) {
+            glUniform2f(this->res_handle, screen_width, screen_height);
+        }
     }
 
     void Program::release() {
