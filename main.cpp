@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <libgen.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/inotify.h>
@@ -33,8 +34,18 @@ void sigint(int signo) {
 }
 
 void* watch_file(void *arg) {
-    string *filename = (string*)arg;
-    
+    string *filepath = (string*)arg;
+
+    char *filepath_cstr = new char[filepath->length() + 1]();
+
+    strcpy(filepath_cstr, filepath->c_str());
+    string filename = basename(filepath_cstr);
+
+    strcpy(filepath_cstr, filepath->c_str());
+    char *directory = dirname(filepath_cstr);
+
+    cout << "Watching file " << filename << " in directory " << directory << endl;
+
     int fd, wd;
     char buffer[BUF_LEN];
 
@@ -47,7 +58,7 @@ void* watch_file(void *arg) {
     int flags = fcntl(fd, F_GETFL, 0);
     fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 
-    wd = inotify_add_watch(fd, ".", IN_MODIFY | IN_CREATE);
+    wd = inotify_add_watch(fd, directory, IN_MODIFY | IN_CREATE);
 
     while (quit == 0) {
         int length, i = 0;
@@ -66,7 +77,7 @@ void* watch_file(void *arg) {
                 (struct inotify_event *) &buffer[i];
             if (event->len) {
                 string affected = event->name;
-                if (affected == *filename) {
+                if (affected == filename) {
                     file_changed = true;
                 }
             }
@@ -77,7 +88,8 @@ void* watch_file(void *arg) {
     inotify_rm_watch(fd, wd);
     close(fd);
 
-    delete filename;
+    delete filepath;
+    delete filepath_cstr;
 
     return NULL;
 }

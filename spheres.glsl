@@ -1,6 +1,6 @@
 #version 330 core
 
-#define MAX_ITERS 50
+#define MAX_ITERS 80
 
 out vec3 color;
 in vec3 pos;
@@ -15,18 +15,17 @@ float sceneDistance(vec3 point) {
     float y = mod(point.y + repeatY / 2.0, repeatY) - repeatY / 2.0;
 
     float originalZ = point.z;
-    float repeatZ = 1.3;
+    float repeatZ = 1.2;
     float z = mod(point.z + repeatZ / 2.0, repeatZ) - repeatZ / 2.0;
 
     point = vec3(x, y, z);
     
     float l1 = (length(point - vec3(0.0, 0.0, 0.0)) - 0.19);
-    //float l2 = (length(point - vec3(-0.15, 0.0, 0.1)) - 0.28);
+    float l2 = (length(point - vec3(0.15, 0.0, 0.1)) - 0.28);
     point.z = originalZ;
-    //return min(max(l1, l2), 2.6 - point.z);
-    return min(l1, 2.6 - point.z);
+    return min(max(l1, l2),  3.6 - point.z);
+    //return min(l1, 2.6 - point.z);
 }
-
 
 vec3 getNormal(vec3 point) {
     return normalize(vec3(sceneDistance(vec3(point.x + epsilon, point.y, point.z)) - 
