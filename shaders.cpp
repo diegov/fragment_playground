@@ -120,7 +120,7 @@ void main() { \n \
 
     void Program::use(unsigned int screen_width, unsigned int  screen_height) {
         glUseProgram(this->program_handle);
-        if (this->res_handle) {
+        if (this->res_handle >= 0) {
             glUniform2f(this->res_handle, screen_width, screen_height);
         }
     }
