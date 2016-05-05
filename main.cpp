@@ -64,7 +64,7 @@ void* watch_file(void *arg) {
         int length, i = 0;
         length = read(fd, buffer, BUF_LEN);
         if (length < 0 && errno == EAGAIN) {
-            usleep(50000);
+            usleep(100000);
             continue;
         }
 
@@ -154,8 +154,10 @@ int main(int argc, char **argv) {
         }
 
         glClear(GL_COLOR_BUFFER_BIT);
+
+        float time = SDL_GetTicks() / 1000.0f;
         
-        quad.render();
+        quad.render(time);
         
         SDL_GL_SwapWindow(window);
 

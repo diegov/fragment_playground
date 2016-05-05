@@ -6,7 +6,7 @@ namespace render {
     public:
         Quad(shaders::Program *program, unsigned int width, unsigned int height);
         ~Quad();
-        void render();
+        void render(float time);
         void resize(unsigned int width, unsigned int height);
     private:
         shaders::Program *program;

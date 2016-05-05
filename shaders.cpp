@@ -110,6 +110,7 @@ void main() { \n \
         if (this->program_handle) {
             glUseProgram(this->program_handle);
             this->res_handle = glGetUniformLocation(this->program_handle, "resolution");
+            this->time_handle = glGetUniformLocation(this->program_handle, "time");
             glUseProgram(0);
         }
     }
@@ -118,10 +119,13 @@ void main() { \n \
         this->deleteExistingPrograms();
     }
 
-    void Program::use(unsigned int screen_width, unsigned int  screen_height) {
+    void Program::use(unsigned int screen_width, unsigned int screen_height, float time) {
         glUseProgram(this->program_handle);
         if (this->res_handle >= 0) {
             glUniform2f(this->res_handle, screen_width, screen_height);
+        }
+        if (this->time_handle >= 0) {
+            glUniform1f(this->time_handle, time);
         }
     }
 

@@ -26,8 +26,8 @@ namespace render {
         glDeleteBuffers(1, &this->buffer_handle);
     }
     
-    void Quad::render() {
-        this->program->use(this->width, this->height);
+    void Quad::render(float time) {
+        this->program->use(this->width, this->height, time);
         
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, this->buffer_handle);

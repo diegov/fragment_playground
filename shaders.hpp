@@ -16,7 +16,7 @@ namespace shaders {
         ~Program();
         void reload();
 
-        void use(unsigned int screen_width, unsigned int screen_height);
+        void use(unsigned int screen_width, unsigned int screen_height, float time);
         void release();
     private:
         GLuint program_handle;
@@ -25,6 +25,7 @@ namespace shaders {
         string filename;
 
         GLuint res_handle;
+        GLuint time_handle;
 
         void deleteExistingPrograms();
         void compile(GLuint handle, string &shader_code);
